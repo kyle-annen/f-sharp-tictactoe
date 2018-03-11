@@ -50,3 +50,10 @@ let intSqrt (n:int) : int =
     
 let rows (board:Board) : Board list = 
     board |> List.chunkBySize (intSqrt board.Length)
+
+let columns (board:Board) : Board list =
+    board
+    |> List.indexed
+    |> List.groupBy (fun (i, v) -> (i + 1) % (intSqrt board.Length))
+    |> List.map (fun (i, v) -> v)
+    |> List.map (fun elem -> List.map (fun (i, v) -> v ) elem)
