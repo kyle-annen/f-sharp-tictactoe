@@ -1,16 +1,6 @@
 module TicTacToe.Board
 
-type Space = 
-    | A 
-    | B
-    | Empty
-
-type Board = Space list
-
-type Result =
-    | Win
-    | Tie
-    | None
+open Types
 
 let initBoard (dimension:int) : Board =
     [ for _ in 1..(dimension * dimension) do yield Empty]
