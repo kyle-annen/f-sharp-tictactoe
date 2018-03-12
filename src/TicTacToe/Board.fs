@@ -13,7 +13,7 @@ type Result =
     | None
 
 let initBoard (dimension:int) : Board =
-    [ for i in 1..(dimension * dimension) do yield Empty]
+    [ for _ in 1..(dimension * dimension) do yield Empty]
 
 let getPreceding (loc:int) (board:Board) : Board =
     board
@@ -69,8 +69,7 @@ let columns (board:Board) : Board list =
     board
     |> List.indexed
     |> List.groupBy (colomn dimension)
-    |> List.map unIndexed 
-    |> List.map unIndexNestedList 
+    |> List.map (unIndexed >> unIndexNestedList)
 
 let diagonals (board:Board) : Board list =
     let dimension = (intSqrt board.Length)
