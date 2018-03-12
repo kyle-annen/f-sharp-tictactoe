@@ -7,6 +7,11 @@ type Space =
 
 type Board = Space list
 
+type Result =
+    | Win
+    | Tie
+    | None
+
 let initBoard (dimension:int) : Board =
     [ for i in 1..(dimension * dimension) do yield Empty]
 
@@ -53,11 +58,11 @@ let intSqrt (n:int) : int =
 let rows (board:Board) : Board list = 
     board |> List.chunkBySize (intSqrt board.Length)
 
-let private unIndexed (i, v) = v 
+let private unIndexed (_, v) = v 
 
 let private unIndexNestedList elem = List.map unIndexed elem
 
-let private colomn dimension = fun (i, v) -> (i + 1) % dimension
+let private colomn dimension = fun (i, _) -> (i + 1) % dimension
 
 let columns (board:Board) : Board list =
     let dimension = intSqrt board.Length
@@ -91,5 +96,8 @@ let checkTie (board:Board) : bool =
     let emptySpaces = List.exists (fun elem -> elem = Empty) board
     (not emptySpaces) && (not (checkWin board))
 
-let checkGameOver (board:Board) : bool =
-    (checkTie board) || (checkWin board)
+let getResult (board:Board) : Result =
+    match (checkWin board, checkTie board) with
+        | (true, _) -> Win
+        | (_ , true) -> Tie
+        | (_ , _) -> None
