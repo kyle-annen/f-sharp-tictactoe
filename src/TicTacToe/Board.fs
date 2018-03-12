@@ -40,9 +40,12 @@ let getOpenMoves (board:Board) =
     |> List.filter openSpace
     |> List.map indexToLocation
 
+let private checkEmpty (board:Board) : bool =
+    List.exists (fun elem -> elem = Empty) board
+
 let checkSeq (board:Board) : bool =  
-    match board.Head with
-    | Empty -> false
+    match checkEmpty board with
+    | true -> false
     | _ -> List.forall (fun elem -> elem = board.Head) board
 
 let intSqrt (n:int) : int = 
@@ -57,3 +60,27 @@ let columns (board:Board) : Board list =
     |> List.groupBy (fun (i, v) -> (i + 1) % (intSqrt board.Length))
     |> List.map (fun (i, v) -> v)
     |> List.map (fun elem -> List.map (fun (i, v) -> v ) elem)
+
+let diagonals (board:Board) : Board list =
+    let dimension = (intSqrt board.Length)
+
+    let diagonal1 = 
+        [for i in 1..board.Length do
+            if (i - 1) % (dimension + 1) = 0 then yield i]
+
+    let diagonal2 = 
+        [for i in dimension..(board.Length - 1) do
+            if (i + 1) % (dimension - 1) = 0 then yield i]
+
+    [ diagonal1; diagonal2 ]
+    |> List.map (fun elem -> List.map (fun v -> board.[v - 1]) elem)
+
+let checkWin (board:Board) =
+    (rows board)
+    |> List.append (columns board)
+    |> List.append (diagonals board)
+    |> List.fold (fun acc boardSeq -> acc || (checkSeq boardSeq)) false
+
+let checkTie (board:Board) = 
+    let emptySpaces = List.exists (fun elem -> elem = Empty) board
+    (not emptySpaces) && (not (checkWin board))
