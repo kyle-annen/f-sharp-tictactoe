@@ -16,8 +16,7 @@ let getPreceding (loc:int) (board:Board) : Board =
     |> Seq.toList
 
 let getFollowing (loc:int) (board:Board) : Board =
-    if loc = board.Length then
-        []
+    if loc = board.Length then []
     else 
         board
         |> Seq.skip (loc)
@@ -32,7 +31,7 @@ let placeMove (loc:int) (space:Space) (board:Board) :Board =
 
 let private openSpace (i, v) = v = Empty
 
-let private indexToLocation (i, v) = i + 1
+let private indexToLocation (index, value) = index + 1
 
 let getOpenMoves (board:Board) = 
     board
@@ -54,12 +53,19 @@ let intSqrt (n:int) : int =
 let rows (board:Board) : Board list = 
     board |> List.chunkBySize (intSqrt board.Length)
 
+let private unIndexed (i, v) = v 
+
+let private unIndexNestedList elem = List.map unIndexed elem
+
+let private colomn dimension = fun (i, v) -> (i + 1) % dimension
+
 let columns (board:Board) : Board list =
+    let dimension = intSqrt board.Length
     board
     |> List.indexed
-    |> List.groupBy (fun (i, v) -> (i + 1) % (intSqrt board.Length))
-    |> List.map (fun (i, v) -> v)
-    |> List.map (fun elem -> List.map (fun (i, v) -> v ) elem)
+    |> List.groupBy (colomn dimension)
+    |> List.map unIndexed 
+    |> List.map unIndexNestedList 
 
 let diagonals (board:Board) : Board list =
     let dimension = (intSqrt board.Length)
@@ -75,12 +81,15 @@ let diagonals (board:Board) : Board list =
     [ diagonal1; diagonal2 ]
     |> List.map (fun elem -> List.map (fun v -> board.[v - 1]) elem)
 
-let checkWin (board:Board) =
+let checkWin (board:Board) : bool =
     (rows board)
     |> List.append (columns board)
     |> List.append (diagonals board)
     |> List.fold (fun acc boardSeq -> acc || (checkSeq boardSeq)) false
 
-let checkTie (board:Board) = 
+let checkTie (board:Board) : bool = 
     let emptySpaces = List.exists (fun elem -> elem = Empty) board
     (not emptySpaces) && (not (checkWin board))
+
+let checkGameOver (board:Board) : bool =
+    (checkTie board) || (checkWin board)
