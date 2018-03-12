@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="AI.fs" />
     <Compile Include="Board.fs" />
+    <Compile Include="AI.fs" />
   </ItemGroup>
 
 </Project>
