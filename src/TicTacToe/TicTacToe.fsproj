@@ -7,6 +7,8 @@
   <ItemGroup>
     <Compile Include="Types.fs" />
     <Compile Include="Board.fs" />
+    <Compile Include="GameState.fs" />
+    <Compile Include="MockGameState.fs" />
     <Compile Include="AI.fs" />
   </ItemGroup>
 

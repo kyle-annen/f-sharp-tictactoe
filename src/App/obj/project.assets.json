@@ -4353,8 +4353,7 @@
     ]
   },
   "packageFolders": {
-    "/Users/kyleannen/.nuget/packages/": {},
-    "/usr/local/share/dotnet/sdk/NuGetFallbackFolder": {}
+    "/Users/kyleannen/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
@@ -4365,11 +4364,8 @@
       "packagesPath": "/Users/kyleannen/.nuget/packages/",
       "outputPath": "/Users/kyleannen/code/f-sharp/FSharpTTT/src/App/obj/",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "/Users/kyleannen/.nuget/NuGet/NuGet.Config"
+        "/Users/kyleannen/.config/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp2.0"
@@ -4390,14 +4386,13 @@
     "frameworks": {
       "netcoreapp2.0": {
         "dependencies": {
-          "FSharp.Core": {
-            "target": "Package",
-            "version": "[4.2.*, )"
-          },
           "Microsoft.NETCore.App": {
             "target": "Package",
-            "version": "[2.0.0, )",
-            "autoReferenced": true
+            "version": "2.0"
+          },
+          "FSharp.Core": {
+            "target": "Package",
+            "version": "4.2.*"
           }
         },
         "imports": [

@@ -11,22 +11,23 @@ let getPreceding (loc:int) (board:Board) : Board =
     |> Seq.toList
 
 let getFollowing (loc:int) (board:Board) : Board =
-    if loc = board.Length then []
-    else 
-        board
-        |> Seq.skip (loc)
+    match (loc, board) with
+    | (_, _) when board.Length = loc -> []
+    | _ -> 
+        board 
+        |> Seq.skip loc 
         |> Seq.toList
 
 let getMove space : Board = [space;]
 
 let placeMove (loc:int) (space:Space) (board:Board) :Board = 
-    (getFollowing loc board)
+    getFollowing loc board
     |> List.append (getMove space)
     |> List.append (getPreceding loc board)
 
-let private openSpace (i, v) = v = Empty
+let private openSpace (_, v) = v = Empty
 
-let private indexToLocation (index, value) = index + 1
+let private indexToLocation (index, _) = index + 1
 
 let getOpenMoves (board:Board) = 
     board
@@ -35,7 +36,7 @@ let getOpenMoves (board:Board) =
     |> List.map indexToLocation
 
 let private checkEmpty (board:Board) : bool =
-    List.exists (fun elem -> elem = Empty) board
+    board |> List.exists (fun elem -> elem = Empty)
 
 let checkSeq (board:Board) : bool =  
     match checkEmpty board with
