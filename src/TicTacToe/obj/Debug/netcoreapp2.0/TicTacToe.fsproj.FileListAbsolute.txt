@@ -1,0 +1,6 @@
+/Users/kyleannen/code/f-sharp/FSharpTTT/src/TicTacToe/bin/Debug/netcoreapp2.0/TicTacToe.deps.json
+/Users/kyleannen/code/f-sharp/FSharpTTT/src/TicTacToe/bin/Debug/netcoreapp2.0/TicTacToe.dll
+/Users/kyleannen/code/f-sharp/FSharpTTT/src/TicTacToe/bin/Debug/netcoreapp2.0/TicTacToe.pdb
+/Users/kyleannen/code/f-sharp/FSharpTTT/src/TicTacToe/obj/Debug/netcoreapp2.0/TicTacToe.dll
+/Users/kyleannen/code/f-sharp/FSharpTTT/src/TicTacToe/obj/Debug/netcoreapp2.0/TicTacToe.pdb
+/Users/kyleannen/code/f-sharp/FSharpTTT/src/TicTacToe/obj/Debug/netcoreapp2.0/TicTacToe.fsprojResolveAssemblyReference.cache

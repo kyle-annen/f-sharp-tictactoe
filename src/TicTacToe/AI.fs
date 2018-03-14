@@ -21,13 +21,12 @@ let progressState (newBoard:IndexedBoard) (state:NegamaxState) =
 
 let scoreBoard depth : int =  100 - depth
 
-let flipScore score : int =  score * -1
+let flipScore = (*) -1
 
 let unindex (list:('a * 'b) list) = 
     List.map (fun (_, v) -> v) list
 
 let emptySpaces = List.filter (fun (_, space) -> space = Empty) 
-
 
 let getStartState (gameState:GameState) = {
     MaxSpace = gameState.CurrentPlayer.Space;
@@ -43,10 +42,6 @@ let getScoreStrategy state =
 
 let inc  = (+) 1
 
-let printAndGo label (pipedIn:List<'a>) =
-    if pipedIn.Length < 3 then printfn "%s %A" label pipedIn
-    pipedIn
-
 let makeMoveIndexedBoard state move : IndexedBoard = 
     state.IndexedBoard
     |> List.map (
@@ -59,13 +54,14 @@ let private getBestMove state scoreStrategy (scoreList: (int * int) list) =
         match scoreStrategy with
         | Max -> List.maxBy snd reindexList |> fst
         | Min -> List.minBy snd reindexList |> fst
+
     let board = state.IndexedBoard |> emptySpaces 
     let moveIndex = board.[bestMoveIndex] |> fst
     let moveScore = reindexList.[bestMoveIndex] |> snd
 
     (moveIndex, moveScore)
 
-let negamax (gameState:GameState) : int = 
+let minimax (depthLimit:int) (gameState:GameState) : int = 
     let rec go (state:NegamaxState) : int * int =
         let scoreStrategy = getScoreStrategy state
 
@@ -81,9 +77,23 @@ let negamax (gameState:GameState) : int =
                     | (Win, Max)  -> (move, score)
                     | (Win, _)    -> (move, score |> flipScore)
                     | (Tie, _)    -> (move, 0)
+                    | (_, Max) when state.Depth > depthLimit -> (move, score - 2)
+                    | (_, Min) when state.Depth > depthLimit -> (move, score + 2)
                     | (None, _)   -> state |> progressState newBoard |> go)
         getBestMove state scoreStrategy scores
 
     go (getStartState gameState) |> fst |> inc
 
+let randomMove (gameState : GameState) =
+    let openMoves = getOpenMoves gameState.Board
+    let index = System.Random().Next(openMoves.Length)
+    openMoves.[index]
 
+
+let getAIMove (difficulty:Difficulty) (gameState:GameState) =
+    let mediumDepth = 3
+    let hardDepth = 10
+    match difficulty with
+    | Easy -> randomMove gameState
+    | Medium -> minimax mediumDepth gameState
+    | Hard ->  minimax hardDepth gameState
