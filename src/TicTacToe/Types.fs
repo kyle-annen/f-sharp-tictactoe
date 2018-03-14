@@ -33,3 +33,22 @@ type GameState = {
     Board: Board;
     Result: Result;
 }
+
+type IndexedBoard = (int * Space) list
+
+type NegamaxState = {
+    MaxSpace: Space;
+    CurrentSpace: Space;
+    Depth: int;
+    IndexedBoard: IndexedBoard;
+}
+
+type ScoreStrategy = 
+    | Max
+    | Min
+
+type LogLevel =
+    | Info
+    | Debug
+    | Danger
+    | Game

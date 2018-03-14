@@ -10,6 +10,7 @@
     <Compile Include="GameState.fs" />
     <Compile Include="MockGameState.fs" />
     <Compile Include="AI.fs" />
+    <Compile Include="Logger.fs" />
   </ItemGroup>
 
 </Project>

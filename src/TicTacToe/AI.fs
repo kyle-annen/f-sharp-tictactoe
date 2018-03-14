@@ -2,20 +2,6 @@ module TicTacToe.AI
 
 open Types
 open Board
-open TicTacToe
-
-type IndexedBoard = (int * Space) list
-
-type NegamaxState = {
-    MaxSpace: Space;
-    CurrentSpace: Space;
-    Depth: int;
-    IndexedBoard: IndexedBoard;
-}
-
-type ScoreStrategy = 
-    | Max
-    | Min
 
 let swapCurrentSpace (state:NegamaxState) =
     let nextSpace = 
@@ -37,7 +23,8 @@ let scoreBoard depth : int =  100 - depth
 
 let flipScore score : int =  score * -1
 
-let unindex = List.map (fun (_, v) -> v)
+let unindex (list:('a * 'b) list) = 
+    List.map (fun (_, v) -> v) list
 
 let emptySpaces = List.filter (fun (_, space) -> space = Empty) 
 
@@ -54,7 +41,7 @@ let getScoreStrategy state =
     | true -> Max
     | _ -> Min
 
-let inc i = i + 1
+let inc  = (+) 1
 
 let printAndGo label (pipedIn:List<'a>) =
     if pipedIn.Length < 3 then printfn "%s %A" label pipedIn
@@ -65,7 +52,7 @@ let makeMoveIndexedBoard state move : IndexedBoard =
     |> List.map (
         fun (i, v) -> if i = move then (i, state.CurrentSpace) else (i, v))
 
-let getBestMove state scoreStrategy (scoreList: (int * int) list) =
+let private getBestMove state scoreStrategy (scoreList: (int * int) list) =
     let reindexList = scoreList |> unindex |> List.indexed
 
     let bestMoveIndex =
@@ -98,3 +85,5 @@ let negamax (gameState:GameState) : int =
         getBestMove state scoreStrategy scores
 
     go (getStartState gameState) |> fst |> inc
+
+
