@@ -3,97 +3,99 @@ module TicTacToe.AI
 open Types
 open Board
 
-let swapCurrentSpace (state:NegamaxState) =
+let SwapCurrentSpace (state:NegamaxState) =
     let nextSpace = 
         match state.CurrentSpace with
         | A -> B
         | _ -> A
     { state with CurrentSpace = nextSpace }
 
-let updateNegamaxBoard (newBoard:IndexedBoard) (state:NegamaxState) =
+let UpdateNegamaxBoard (newBoard:IndexedBoard) (state:NegamaxState) =
     { state with IndexedBoard = newBoard }
 
-let increaseDepth (state:NegamaxState) =
+let IncreaseDepth (state:NegamaxState) =
     { state with Depth = (state.Depth + 1) }
 
-let progressState (newBoard:IndexedBoard) (state:NegamaxState) =
-    state |> swapCurrentSpace |> updateNegamaxBoard newBoard |> increaseDepth
+let ProgressState (newBoard:IndexedBoard) (state:NegamaxState) =
+    state |> SwapCurrentSpace |> UpdateNegamaxBoard newBoard |> IncreaseDepth
 
-let scoreBoard depth : int =  100 - depth
+let ScoreBoard depth : int =  100 - depth
 
-let flipScore = (*) -1
+let FlipScore = (*) -1
 
-let unindex (list:('a * 'b) list) = 
+let Unindex (list:('a * 'b) list) = 
     List.map (fun (_, v) -> v) list
 
-let emptySpaces = List.filter (fun (_, space) -> space = Empty) 
+let EmptySpaces = List.filter (fun (_, space) -> space = Empty) 
 
-let getStartState (gameState:GameState) = {
+let GetStartState (gameState:GameState) = {
     MaxSpace = gameState.CurrentPlayer.Space;
     CurrentSpace = gameState.CurrentPlayer.Space;
     Depth = 1;
     IndexedBoard = List.indexed gameState.Board;
 }
 
-let getScoreStrategy state = 
+let GetScoreStrategy state = 
     match state.CurrentSpace = state.MaxSpace with
     | true -> Max
     | _ -> Min
 
-let inc  = (+) 1
+let Increment  = (+) 1
 
-let makeMoveIndexedBoard state move : IndexedBoard = 
+let MakeMoveIndexedBoard state move : IndexedBoard = 
     state.IndexedBoard
     |> List.map (
-        fun (i, v) -> if i = move then (i, state.CurrentSpace) else (i, v))
+        fun (i, v) -> 
+            if i = move then (i, state.CurrentSpace) 
+            else (i, v))
 
 let private getBestMove state scoreStrategy (scoreList: (int * int) list) =
-    let reindexList = scoreList |> unindex |> List.indexed
+    let reindexList = scoreList |> Unindex |> List.indexed
 
     let bestMoveIndex =
         match scoreStrategy with
         | Max -> List.maxBy snd reindexList |> fst
         | Min -> List.minBy snd reindexList |> fst
 
-    let board = state.IndexedBoard |> emptySpaces 
+    let board = state.IndexedBoard |> EmptySpaces 
     let moveIndex = board.[bestMoveIndex] |> fst
     let moveScore = reindexList.[bestMoveIndex] |> snd
 
     (moveIndex, moveScore)
 
-let minimax (depthLimit:int) (gameState:GameState) : int = 
+let Minimax (depthLimit:int) (gameState:GameState) : int = 
     let rec go (state:NegamaxState) : int * int =
-        let scoreStrategy = getScoreStrategy state
+        let scoreStrategy = GetScoreStrategy state
 
         let scores = 
             state.IndexedBoard
-            |> emptySpaces
+            |> EmptySpaces
             |> List.map (
                 fun (move, _) ->
-                    let newBoard = makeMoveIndexedBoard state move
-                    let score = scoreBoard state.Depth
-                    let result = newBoard |> List.map (fun (_, v) -> v) |> getResult
+                    let newBoard = MakeMoveIndexedBoard state move
+                    let score = ScoreBoard state.Depth
+                    let result = newBoard |> List.map (fun (_, v) -> v) |> GetResult
                     match (result, scoreStrategy) with
                     | (Win, Max)  -> (move, score)
-                    | (Win, _)    -> (move, score |> flipScore)
+                    | (Win, _)    -> (move, score |> FlipScore)
                     | (Tie, _)    -> (move, 0)
                     | (_, Max) when state.Depth > depthLimit -> (move, score - 2)
                     | (_, Min) when state.Depth > depthLimit -> (move, score + 2)
-                    | (None, _)   -> state |> progressState newBoard |> go)
+                    | (None, _)   -> state |> ProgressState newBoard |> go)
         getBestMove state scoreStrategy scores
 
-    go (getStartState gameState) |> fst |> inc
+    go (GetStartState gameState) |> fst |> Increment
 
-let randomMove (gameState : GameState) =
+let RandomMove (gameState : GameState) =
     let openMoves = getOpenMoves gameState.Board
     let index = System.Random().Next(openMoves.Length)
     openMoves.[index]
 
 
-let getAIMove (difficulty:Difficulty) (gameState:GameState) =
+let GetAIMove (difficulty:Difficulty) (gameState:GameState) =
     let mediumDepth = 3
     let hardDepth = 10
     match difficulty with
-    | Easy -> randomMove gameState
-    | Medium -> minimax mediumDepth gameState
-    | Hard ->  minimax hardDepth gameState
+    | Easy -> RandomMove gameState
+    | Medium -> Minimax mediumDepth gameState
+    | Hard ->  Minimax hardDepth gameState

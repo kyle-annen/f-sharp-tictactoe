@@ -1,9 +1,0 @@
-/Users/kyleannen/code/f-sharp/FSharpTTT/src/App/bin/Debug/netcoreapp2.0/App.deps.json
-/Users/kyleannen/code/f-sharp/FSharpTTT/src/App/bin/Debug/netcoreapp2.0/App.runtimeconfig.json
-/Users/kyleannen/code/f-sharp/FSharpTTT/src/App/bin/Debug/netcoreapp2.0/App.runtimeconfig.dev.json
-/Users/kyleannen/code/f-sharp/FSharpTTT/src/App/bin/Debug/netcoreapp2.0/App.dll
-/Users/kyleannen/code/f-sharp/FSharpTTT/src/App/bin/Debug/netcoreapp2.0/App.pdb
-/Users/kyleannen/code/f-sharp/FSharpTTT/src/App/bin/Debug/netcoreapp2.0/TicTacToe.dll
-/Users/kyleannen/code/f-sharp/FSharpTTT/src/App/bin/Debug/netcoreapp2.0/TicTacToe.pdb
-/Users/kyleannen/code/f-sharp/FSharpTTT/src/App/obj/Debug/netcoreapp2.0/App.dll
-/Users/kyleannen/code/f-sharp/FSharpTTT/src/App/obj/Debug/netcoreapp2.0/App.pdb
