@@ -21,3 +21,5 @@ let RenderBoard outputFn (gameState : GameState) =
     | [a;b;c;d;e;f;g;h;i] -> sprintf template3x3 a b c d e f g h i
     | _ -> ""
     |> outputFn
+
+let RenderMessage outputFn message = outputFn message 
