@@ -52,3 +52,28 @@ type LogLevel =
     | Debug
     | Danger
     | Game
+
+type Language = 
+    | English
+    | Mandarin
+
+type DialogSet = {
+    Greeting : string;
+    SelectLang : string;
+    SelectPlayerType : string;
+    SelectDifficulty : string;
+    PTypeHuman : string;
+    PTypeComputer : string;
+    PickBoardSize : string;
+    TurnPrompt : string;
+    PlayerAnnounce : string;
+    GameOver : string;
+    Win : string;
+    Tie : string;
+    InvalidPlay : string;
+    InputPrompt : string;
+    ContinuePlaying : string;
+    Easy : string;
+    Medium : string;
+    Hard : string;
+}

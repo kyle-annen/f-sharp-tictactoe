@@ -12,6 +12,9 @@
     <Compile Include="AI.fs" />
     <Compile Include="Logger.fs" />
     <Compile Include="UI.fs" />
+    <Compile Include="Input.fs" />
+    <Compile Include="Game.fs" />
+
   </ItemGroup>
 
 </Project>
