@@ -9,6 +9,8 @@ let private oToken = "O"
 
 let EmptyLine = ""
 
+let ClearScreen = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+
 let Template3x3<'a> = 
     Printf.StringFormat<'a>" %s | %s | %s \n---+---+---\n %s | %s | %s \n---+---+---\n %s | %s | %s "
 
@@ -18,8 +20,6 @@ let private applyTemplate template board =
     | _ -> ""
 
 let ConsoleRender = Log LogLevel.Game (printf "%s \n")
-
-let ClearScreen = System.Console.Clear()
 
 let FormatBoard template (gameState : GameState) = 
     gameState.Board
