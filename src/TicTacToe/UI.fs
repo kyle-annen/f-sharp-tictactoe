@@ -3,33 +3,45 @@ module TicTacToe.UI
 open Types
 open Logger
 
-let xToken = "X"
+let private xToken = "X"
 
-let oToken = "O"
+let private oToken = "O"
 
-let private template3x3 = 
+let Template3x3<'a> = 
     Printf.StringFormat<'a>" %s | %s | %s \n---+---+---\n %s | %s | %s \n---+---+---\n %s | %s | %s "
 
-let ConsoleRenderer = Log LogLevel.Game (printf "%s")
-
-let RenderBoard outputFn (gameState : GameState) = 
-    let board = 
-        gameState.Board
-        |> List.mapi (
-            fun i space -> 
-                match space with 
-                | A -> xToken
-                | B -> oToken
-                | _ -> sprintf "%i" (i + 1))
+let private applyTemplate template board =
     match board with 
-    | [a;b;c;d;e;f;g;h;i] -> sprintf template3x3 a b c d e f g h i
+    | [a;b;c;d;e;f;g;h;i] -> sprintf template a b c d e f g h i
     | _ -> ""
-    |> outputFn
 
-let RenderMessage outputFn (message : string) = outputFn message 
+let ConsoleRender = Log LogLevel.Game (printf "%s \n")
+
+let ClearScreen =
+    seq { for _ in [1..1000] do yield "\n"}
+    |> Seq.toArray
+    |> String.concat ""
+    |> ConsoleRender
+
+let FormatBoard template (gameState : GameState) = 
+    gameState.Board
+    |> List.mapi (
+        fun i space -> 
+            match space with 
+            | A -> xToken
+            | B -> oToken
+            | _ -> sprintf "%i" (i + 1))
+    |> applyTemplate template
 
 module Dialog = 
+
+    let LanguageOption = {
+        English = "1 - English"
+        Mandarin = "2 - 普通话"
+    }
+
     let English = {
+        LanguageType = English;
         Greeting = "Let's play TicTacToe!";
         SelectLang = "Please select a language.";
         SelectPlayerType = "Choose computer or human player.";
@@ -50,6 +62,7 @@ module Dialog =
         Hard = "hard";
     }
     let Mandarin = {
+        LanguageType = Mandarin;
         Greeting = "我们玩TicTacToe！";
         SelectLang = "请选择语言。";
         SelectPlayerType = "选择电脑或人手。";

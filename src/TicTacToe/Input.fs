@@ -1,16 +1,10 @@
 module TicTacToe.Input
 
-open UI
-
-let private getInput = 
-    try 
-        System.Console.ReadLine
-    
-
-// let GetUserInput prompt =
-//     UI.RenderMessage UI.ConsoleRenderer prompt
-//     let rawInput : string = getInput
-//     rawInput.Trim()
+let rec GetInput (validCharacters : char list) : char = 
+    let charValue = System.Console.ReadKey(true).KeyChar
+    match charValue with
+    | _ when List.contains charValue validCharacters -> charValue
+    | _ -> GetInput validCharacters
 
 
 

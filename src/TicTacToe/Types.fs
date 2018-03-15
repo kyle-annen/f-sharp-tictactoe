@@ -58,6 +58,7 @@ type Language =
     | Mandarin
 
 type DialogSet = {
+    LanguageType: Language;
     Greeting : string;
     SelectLang : string;
     SelectPlayerType : string;
@@ -76,4 +77,9 @@ type DialogSet = {
     Easy : string;
     Medium : string;
     Hard : string;
+}
+
+type UILanguageOptions = {
+    English : string;
+    Mandarin : string;
 }
