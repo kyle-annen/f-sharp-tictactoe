@@ -20,10 +20,10 @@ let GetFollowing (loc:int) (board:Board) : Board =
 
 let GetMove space : Board = [space;]
 
-let PlaceMove (loc:int) (space:Space) (board:Board) :Board = 
-    GetFollowing loc board
+let PlaceMove (location : int) (space : Space) (board : Board) : Board = 
+    GetFollowing location board
     |> List.append (GetMove space)
-    |> List.append (GetPreceding loc board)
+    |> List.append (GetPreceding location board)
 
 let private openSpace (_, v) = v = Empty
 

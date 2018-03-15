@@ -7,6 +7,8 @@ let private xToken = "X"
 
 let private oToken = "O"
 
+let EmptyLine = ""
+
 let Template3x3<'a> = 
     Printf.StringFormat<'a>" %s | %s | %s \n---+---+---\n %s | %s | %s \n---+---+---\n %s | %s | %s "
 
@@ -17,11 +19,7 @@ let private applyTemplate template board =
 
 let ConsoleRender = Log LogLevel.Game (printf "%s \n")
 
-let ClearScreen =
-    seq { for _ in [1..1000] do yield "\n"}
-    |> Seq.toArray
-    |> String.concat ""
-    |> ConsoleRender
+let ClearScreen = System.Console.Clear()
 
 let FormatBoard template (gameState : GameState) = 
     gameState.Board
