@@ -1,7 +1,7 @@
 module TicTacToe.Types
 
-type Space = 
-    | A 
+type Space =
+    | A
     | B
     | Empty
 
@@ -12,7 +12,7 @@ type Result =
     | Tie
     | None
 
-type Difficulty = 
+type Difficulty =
     | Easy
     | Medium
     | Hard
@@ -43,7 +43,7 @@ type NegamaxState = {
     IndexedBoard: IndexedBoard;
 }
 
-type ScoreStrategy = 
+type ScoreStrategy =
     | Max
     | Min
 
@@ -53,33 +53,11 @@ type LogLevel =
     | Danger
     | Game
 
-type Language = 
-    | English
-    | Mandarin
+type Response =
+    | Yes
+    | No
 
-type DialogSet = {
-    LanguageType: Language;
-    Greeting : string;
-    SelectLang : string;
-    SelectPlayerType : string;
-    SelectDifficulty : string;
-    PTypeHuman : string;
-    PTypeComputer : string;
-    PickBoardSize : string;
-    TurnPrompt : string;
-    PlayerAnnounce : string;
-    GameOver : string;
-    Win : string;
-    Tie : string;
-    InvalidPlay : string;
-    InputPrompt : string;
-    ContinuePlaying : string;
-    Easy : string;
-    Medium : string;
-    Hard : string;
-}
-
-type UILanguageOptions = {
-    English : string;
-    Mandarin : string;
-}
+type GameVersion =
+    | ComputerVsComputer
+    | HumanVsComputer
+    | HumanVsHuman

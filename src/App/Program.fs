@@ -1,4 +1,6 @@
-﻿[<EntryPoint>]
+﻿open TicTacToe
+
+[<EntryPoint>]
 let main argv =
-    TicTacToe.Game.Run
+    Game.PlayGame UI.ConsoleRender true
     0

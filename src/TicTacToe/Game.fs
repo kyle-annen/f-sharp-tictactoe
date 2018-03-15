@@ -1,72 +1,60 @@
 module TicTacToe.Game
 
 open TicTacToe.Types
+let GameOptions = "1 - Computer Vs Computer\n2 - Human Vs Computer\n3 - Human Vs Human"
+let SetupGameState (outputFn : string -> unit) =
+    outputFn GameOptions
+    let gameVersion = Input.GetGameVersion
+    let basePlayer = { PlayerType = Computer; Difficulty = Easy; Space = A}
 
-let yesNoOptions = ['y';'n']
-let oneTwoOptions = ['1';'2']
+    let players =
+        match gameVersion with
+        | ComputerVsComputer ->
+            ({ basePlayer }, {basePlayer with Space = B})
+        | HumanVsComputer ->
+            ({ basePlayer with PlayerType = Human },
+                {basePlayer with Space = B})
+        | HumanVsHuman ->
+            ({ basePlayer with PlayerType = Human },
+                {basePlayer with PlayerType = Human; Space = B})
 
-let GetDialogSet language =
-    match language with
-    | Types.English -> UI.Dialog.English
-    | Types.Mandarin -> UI.Dialog.Mandarin
 
-let MatchLanguage selection =
-    match selection with
-    | '1' -> Types.English
-    | _ -> Types.Mandarin
 
-let GetLaguageSelection outputFn (dialog : Types.DialogSet) =
-    outputFn dialog.SelectLang
-    outputFn UI.EmptyLine
-    outputFn UI.Dialog.LanguageOption.English
-    outputFn UI.Dialog.LanguageOption.Mandarin
-    outputFn UI.EmptyLine
-    Input.GetInput oneTwoOptions |> MatchLanguage
 
-let GetMoveOptions (gameState : Types.GameState) =
-    gameState.Board
-    |> Board.getOpenMoves 
-    |> List.map (string >> char)
 
-let GetHumanMove (gameState : Types.GameState) : int = 
-    gameState
-    |> GetMoveOptions
-    |> Input.GetInput
-    |> string
-    |> int
+
 
 let GetMove (gameState : Types.GameState) : int =
     match gameState.CurrentPlayer.PlayerType with
-    | Types.Human -> GetHumanMove gameState
+    | Types.Human -> Input.GetHumanMove gameState
     | Types.Computer -> AI.GetAIMove gameState
 
-let rec GameLoop outputFn (dialogSet : Types.DialogSet) (gameState : Types.GameState) = 
-    outputFn UI.ClearScreen
-    gameState |> UI.FormatBoard UI.Template3x3 |> outputFn 
+let rec GameLoop outputFn (gameState : Types.GameState) =
+    gameState
+    |> UI.FormatBoard UI.Template3x3
+    |> outputFn
+
     match gameState.Result with
-    | Win -> outputFn dialogSet.Win 
-    | Tie -> outputFn dialogSet.Tie
-    | _ -> 
-        outputFn dialogSet.TurnPrompt
+    | Win -> outputFn Dialog.Win
+    | Tie -> outputFn Dialog.Tie
+    | _ ->
+        outputFn Dialog.TurnPrompt
         gameState
         |> GetMove
         |> GameState.ProgressGameState gameState
-        |> GameLoop outputFn dialogSet 
+        |> GameLoop outputFn
 
-let rec PlayGame outputFn (playing : bool) (language: Types.Language) =
+let rec PlayGame outputFn (playing : bool) =
     if playing then
-        outputFn UI.ClearScreen 
-        let startDialogSet = GetDialogSet language 
-        outputFn startDialogSet.Greeting
-        let dialogSet = GetLaguageSelection outputFn startDialogSet |> GetDialogSet
-        GameLoop outputFn dialogSet MockGameState.GetInitialGameState
-        ContinueOrQuit outputFn dialogSet
+        outputFn UI.ClearScreen
+        outputFn Dialog.Greeting
+        let gameState = SetupGameState outputFn
+        GameLoop outputFn MockGameState.GetInitialGameState
+        ContinueOrQuit outputFn
 
-and ContinueOrQuit outputFn (dialogSet : DialogSet) =
-    outputFn dialogSet.ContinuePlaying
+and ContinueOrQuit outputFn =
+    outputFn Dialog.ContinuePlaying
 
-    match Input.GetInput yesNoOptions with
-    | 'y' -> PlayGame outputFn true dialogSet.LanguageType
-    | _ -> PlayGame outputFn false dialogSet.LanguageType
-
-let Run = PlayGame UI.ConsoleRender true Types.English
+    match Input.GetYesOrNo with
+    | Yes -> PlayGame outputFn true
+    | _ -> PlayGame outputFn false

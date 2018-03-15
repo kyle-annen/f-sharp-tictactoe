@@ -64,25 +64,24 @@ let private getBestMove state scoreStrategy (scoreList: (int * int) list) =
     (moveIndex, moveScore)
 
 let Minimax (depthLimit:int) (gameState:GameState) : int = 
-    let rec go (state:NegamaxState) : int * int =
-        let scoreStrategy = GetScoreStrategy state
+    let rec go (negamaxState:NegamaxState) : int * int =
+        let scoreStrategy = GetScoreStrategy negamaxState
 
-        let scores = 
-            state.IndexedBoard
-            |> EmptySpaces
-            |> List.map (
-                fun (move, _) ->
-                    let newBoard = MakeMoveIndexedBoard state move
-                    let score = ScoreBoard state.Depth
-                    let result = newBoard |> List.map (fun (_, v) -> v) |> GetResult
-                    match (result, scoreStrategy) with
-                    | (Win, Max)  -> (move, score)
-                    | (Win, _)    -> (move, score |> FlipScore)
-                    | (Tie, _)    -> (move, 0)
-                    | (_, Max) when state.Depth > depthLimit -> (move, score - 2)
-                    | (_, Min) when state.Depth > depthLimit -> (move, score + 2)
-                    | (None, _)   -> state |> ProgressState newBoard |> go)
-        getBestMove state scoreStrategy scores
+        negamaxState.IndexedBoard
+        |> EmptySpaces
+        |> List.map (
+            fun (move, _) ->
+                let newBoard = MakeMoveIndexedBoard negamaxState move
+                let score = ScoreBoard negamaxState.Depth
+                let result = newBoard |> List.map (fun (_, v) -> v) |> GetResult
+                match (result, scoreStrategy) with
+                | (Win, Max)  -> (move, score)
+                | (Win, _)    -> (move, score |> FlipScore)
+                | (Tie, _)    -> (move, 0)
+                | (_, Max) when negamaxState.Depth > depthLimit -> (move, score - 2)
+                | (_, Min) when negamaxState.Depth > depthLimit -> (move, score + 2)
+                | (None, _)   -> negamaxState |> ProgressState newBoard |> go)
+        |> getBestMove negamaxState scoreStrategy
 
     go (GetStartState gameState) |> fst |> Increment
 
@@ -90,7 +89,6 @@ let RandomMove (gameState : GameState) =
     let openMoves = getOpenMoves gameState.Board
     let index = System.Random().Next(openMoves.Length)
     openMoves.[index]
-
 
 let GetAIMove (gameState:GameState) =
     let mediumDepth = 3

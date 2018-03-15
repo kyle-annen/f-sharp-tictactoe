@@ -11,6 +11,7 @@
     <Compile Include="MockGameState.fs" />
     <Compile Include="AI.fs" />
     <Compile Include="Logger.fs" />
+    <Compile Include="Dialog.fs" />
     <Compile Include="UI.fs" />
     <Compile Include="Input.fs" />
     <Compile Include="Game.fs" />
