@@ -6,7 +6,8 @@ open Logger
 let private xToken = "X"
 let private oToken = "O"
 let EmptyLine = ""
-let ClearScreen = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+
+let ClearScreen() = System.Console.Clear()
 
 let Template3x3<'a> =
     Printf.StringFormat<'a>" %s | %s | %s \n---+---+---\n %s | %s | %s \n---+---+---\n %s | %s | %s "
