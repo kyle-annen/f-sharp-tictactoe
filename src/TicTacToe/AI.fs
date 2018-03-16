@@ -28,9 +28,9 @@ let ScoreBoard depth : int =  100 - depth
 
 let FlipScore (score : Score) : Score = score * -1
 
-let Unindex (list:('a * 'b) list) = List.map (fun (_, v) -> v) list
+let private unindex = List.map (fun (_, v) -> v)
 
-let EmptySpaces = List.filter (fun (_, space) -> space = Empty)
+let private emptySpaces = List.filter (fun (_, space) -> space = Empty)
 
 let GetStartState (gameState:GameState) : NegamaxState = {
     MaxSpace = gameState.CurrentPlayer.Space;
@@ -58,14 +58,14 @@ let private getBestMove
     (state : NegamaxState)
     (scoreStrategy : ScoreStrategy)
     (scoreList: MoveScore list) : MoveScore =
-    let reindexList = scoreList |> Unindex |> List.indexed
+    let reindexList = scoreList |> unindex |> List.indexed
 
     let bestMoveIndex =
         match scoreStrategy with
         | Max -> List.maxBy snd reindexList |> fst
         | Min -> List.minBy snd reindexList |> fst
 
-    let board = state.IndexedBoard |> EmptySpaces
+    let board = state.IndexedBoard |> emptySpaces
     let move : Move = board.[bestMoveIndex] |> fst
     let score : Score = reindexList.[bestMoveIndex] |> snd
 
@@ -76,12 +76,13 @@ let Minimax (depthLimit : Depth) (gameState : GameState) : Move =
         let scoreStrategy = GetScoreStrategy negamaxState
 
         negamaxState.IndexedBoard
-        |> EmptySpaces
+        |> emptySpaces
         |> List.map (
             fun (move, _) ->
                 let newBoard = MakeMoveIndexedBoard negamaxState move
                 let score = ScoreBoard negamaxState.Depth
                 let result = newBoard |> List.map (fun (_, v) -> v) |> GetResult
+
                 match (result, scoreStrategy) with
                 | (Win, Max)  -> (move, score)
                 | (Win, _)    -> (move, score |> FlipScore)
