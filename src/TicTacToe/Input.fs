@@ -36,3 +36,9 @@ let GetGameVersion (input : Types.InputFn) : Types.GameVersion =
     | '1' -> Types.GameVersion.ComputerVsComputer
     | '2' -> Types.GameVersion.HumanVsComputer
     | _ -> Types.GameVersion.HumanVsHuman
+
+let GetDifficulty (input : Types.InputFn) : Types.Difficulty =
+    match GetInput input ['1';'2';'3'] with
+    | '1' -> Types.Easy
+    | '2' -> Types.Medium
+    | _ -> Types.Hard

@@ -100,7 +100,7 @@ let RandomMove (gameState : GameState) : Move =
     openMoves.[index]
 
 let GetAIMove (gameState:GameState) : Move =
-    let mediumDepth = 3
+    let mediumDepth = 4
     let hardDepth = 10
     match gameState.CurrentPlayer.Difficulty with
     | Easy -> RandomMove gameState
