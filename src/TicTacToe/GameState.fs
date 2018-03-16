@@ -18,5 +18,5 @@ let ProgressGameState
 
 let GetMoveOptions (gameState : Types.GameState) : Types.Options =
     gameState.Board
-    |> Board.getOpenMoves
+    |> Board.GetOpenMoves
     |> List.map (string >> char)

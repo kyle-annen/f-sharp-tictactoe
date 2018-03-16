@@ -94,7 +94,7 @@ let Minimax (depthLimit : Depth) (gameState : GameState) : Move =
     go (GetStartState gameState) |> fst |> Increment
 
 let RandomMove (gameState : GameState) : Move =
-    let openMoves = getOpenMoves gameState.Board
+    let openMoves = GetOpenMoves gameState.Board
     let index = System.Random().Next(openMoves.Length)
     openMoves.[index]
 

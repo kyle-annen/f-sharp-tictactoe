@@ -2,7 +2,7 @@ module TicTacToe.Board
 
 open Types
 
-let InitBoard (dimension:int) : Board =
+let InitBoard (dimension : int) : Board =
     [ for _ in 1..(dimension * dimension) do yield Empty]
 
 let GetPreceding (move : Move) (board:Board) : Board =
@@ -26,7 +26,7 @@ let private openSpace (_, space: Space) = space = Empty
 
 let private indexToMove (index, _) : Move = index + 1
 
-let getOpenMoves (board : Board) : Moves =
+let GetOpenMoves (board : Board) : Moves =
     board
     |> List.indexed
     |> List.filter openSpace
@@ -40,27 +40,28 @@ let CheckList(board : Board) : bool =
     | true -> false
     | _ -> List.forall (fun elem -> elem = board.Head) board
 
-let IntSqrt (n:int) : int =
+let private intSqrt (n:int) : int =
     n |> float |> sqrt |> int
 
 let Rows (board:Board) : Board list =
-    board |> List.chunkBySize (IntSqrt board.Length)
+    board |> List.chunkBySize (intSqrt board.Length)
 
 let private unIndex (_, value) = value
 
 let private unIndexNestedList elem = List.map unIndex elem
 
-let Colomn dimension = fun (i, _) -> (i + 1) % dimension
+let private colomn dimension =
+    fun (i, _) -> (i + 1) % dimension
 
 let Columns (board : Board) : Board list =
-    let dimension = IntSqrt board.Length
+    let dimension = intSqrt board.Length
     board
     |> List.indexed
-    |> List.groupBy (Colomn dimension)
+    |> List.groupBy (colomn dimension)
     |> List.map (unIndex >> unIndexNestedList)
 
 let Diagonals (board : Board) : Board list =
-    let dimension = (IntSqrt board.Length)
+    let dimension = (intSqrt board.Length)
 
     let diagonal1 =
         [for i in 1..board.Length do
@@ -73,18 +74,18 @@ let Diagonals (board : Board) : Board list =
     [ diagonal1; diagonal2 ]
     |> List.map (fun elem -> List.map (fun v -> board.[v - 1]) elem)
 
-let CheckWin (board : Board) : bool =
+let private checkWin (board : Board) : bool =
     (Rows board)
     |> List.append (Columns board)
     |> List.append (Diagonals board)
     |> List.fold (fun acc boardSeq -> acc || (CheckList boardSeq)) false
 
-let CheckTie (board : Board) : bool =
+let private checkTie (board : Board) : bool =
     let emptySpaces = List.exists (fun elem -> elem = Empty) board
-    (not emptySpaces) && (not (CheckWin board))
+    (not emptySpaces) && (not (checkWin board))
 
 let GetResult (board : Board) : Result =
-    match (CheckWin board, CheckTie board) with
+    match (checkWin board, checkTie board) with
         | (true, _) -> Win
         | (_ , true) -> Tie
         | (_ , _) -> None
