@@ -2,16 +2,14 @@ module TicTacToe.Game
 
 open Types
 
-let SetupGameState
-    (input : InputFn) (output : OutputFn) =
+let SetupGameState (input : InputFn) (output : OutputFn) =
     output Dialog.GameOptions
     match Input.GetGameVersion input with
     | ComputerVsComputer -> 'a'
     | HumanVsComputer ->'a'
     | HumanVsHuman -> 'a'
 
-let GetMove
-    (input : InputFn) (gameState : GameState) : Move =
+let GetMove (input : InputFn) (gameState : GameState) : Move =
     match gameState.CurrentPlayer.PlayerType with
     | Human -> Input.GetHumanMove input gameState
     | Computer -> AI.GetAIMove gameState

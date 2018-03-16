@@ -1,12 +1,12 @@
 ﻿<Properties StartupConfiguration="{5F8DDB3B-788E-4764-AEC5-51DDC997D358}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="src/TicTacToe/Board.fs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="src/TicTacToe/Game.fs">
     <Files>
-      <File FileName="src/TicTacToe/Board.fs" Line="25" Column="1" />
+      <File FileName="src/TicTacToe/Board.fs" Line="28" Column="1" />
       <File FileName="src/TicTacToe/MockGameState.fs" Line="6" Column="17" />
-      <File FileName="src/TicTacToe/Game.fs" Line="56" Column="1" />
+      <File FileName="src/TicTacToe/Game.fs" Line="18" Column="30" />
       <File FileName="src/App/Program.fs" Line="3" Column="1" />
       <File FileName="src/TicTacToe/UI.fs" Line="10" Column="18" />
-      <File FileName="src/TicTacToe/GameState.fs" Line="17" Column="29" />
+      <File FileName="src/TicTacToe/GameState.fs" Line="17" Column="18" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -15,7 +15,7 @@
             <Node name="src" expanded="True">
               <Node name="App" expanded="True" />
               <Node name="TicTacToe" expanded="True">
-                <Node name="Board.fs" selected="True" />
+                <Node name="Game.fs" selected="True" />
               </Node>
             </Node>
             <Node name="tests" expanded="True">
@@ -44,10 +44,6 @@
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Catchpoint exceptionName="System.Exception" includeSubclasses="True" />
-      <Breakpoint file="/Users/kyleannen/code/f-sharp/FSharpTTT/src/TicTacToe/Game.fs" relfile="src/TicTacToe/Game.fs" line="56" column="1" />
-      <Breakpoint file="/Users/kyleannen/code/f-sharp/FSharpTTT/src/TicTacToe/Board.fs" relfile="src/TicTacToe/Board.fs" line="25" column="1" />
-      <Breakpoint file="/Users/kyleannen/code/f-sharp/FSharpTTT/src/TicTacToe/Board.fs" relfile="src/TicTacToe/Board.fs" line="9" column="1" />
-      <Breakpoint file="/Users/kyleannen/code/f-sharp/FSharpTTT/src/TicTacToe/Game.fs" relfile="src/TicTacToe/Game.fs" line="57" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
