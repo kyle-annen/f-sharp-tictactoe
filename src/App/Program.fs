@@ -2,5 +2,5 @@
 
 [<EntryPoint>]
 let main argv =
-    Game.PlayGame UI.ConsoleRender true
+    Game.PlayGame Input.ConsoleInput UI.ConsoleRender true
     0

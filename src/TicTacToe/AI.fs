@@ -3,53 +3,61 @@ module TicTacToe.AI
 open Types
 open Board
 
-let SwapCurrentSpace (state:NegamaxState) =
-    let nextSpace = 
+let SwapCurrentSpace (state : NegamaxState) : NegamaxState =
+    let nextSpace =
         match state.CurrentSpace with
         | A -> B
         | _ -> A
     { state with CurrentSpace = nextSpace }
 
-let UpdateNegamaxBoard (newBoard:IndexedBoard) (state:NegamaxState) =
+let UpdateNegamaxBoard
+    (newBoard:IndexedBoard) (state:NegamaxState) : NegamaxState =
     { state with IndexedBoard = newBoard }
 
-let IncreaseDepth (state:NegamaxState) =
+let IncreaseDepth (state:NegamaxState) : NegamaxState =
     { state with Depth = (state.Depth + 1) }
 
-let ProgressState (newBoard:IndexedBoard) (state:NegamaxState) =
-    state |> SwapCurrentSpace |> UpdateNegamaxBoard newBoard |> IncreaseDepth
+let ProgressState
+    (newBoard:IndexedBoard) (state:NegamaxState) : NegamaxState =
+    state
+    |> SwapCurrentSpace
+    |> UpdateNegamaxBoard newBoard
+    |> IncreaseDepth
 
 let ScoreBoard depth : int =  100 - depth
 
-let FlipScore = (*) -1
+let FlipScore (score : Score) : Score = score * -1
 
-let Unindex (list:('a * 'b) list) = 
-    List.map (fun (_, v) -> v) list
+let Unindex (list:('a * 'b) list) = List.map (fun (_, v) -> v) list
 
-let EmptySpaces = List.filter (fun (_, space) -> space = Empty) 
+let EmptySpaces = List.filter (fun (_, space) -> space = Empty)
 
-let GetStartState (gameState:GameState) = {
+let GetStartState (gameState:GameState) : NegamaxState = {
     MaxSpace = gameState.CurrentPlayer.Space;
     CurrentSpace = gameState.CurrentPlayer.Space;
     Depth = 1;
     IndexedBoard = List.indexed gameState.Board;
 }
 
-let GetScoreStrategy state = 
+let GetScoreStrategy state =
     match state.CurrentSpace = state.MaxSpace with
     | true -> Max
     | _ -> Min
 
 let Increment  = (+) 1
 
-let MakeMoveIndexedBoard state move : IndexedBoard = 
+let MakeMoveIndexedBoard
+    (state : NegamaxState) (move : Move) : IndexedBoard =
     state.IndexedBoard
     |> List.map (
-        fun (i, v) -> 
-            if i = move then (i, state.CurrentSpace) 
+        fun (i, v) ->
+            if i = move then (i, state.CurrentSpace)
             else (i, v))
 
-let private getBestMove state scoreStrategy (scoreList: (int * int) list) =
+let private getBestMove
+    (state : NegamaxState)
+    (scoreStrategy : ScoreStrategy)
+    (scoreList: MoveScore list) : MoveScore =
     let reindexList = scoreList |> Unindex |> List.indexed
 
     let bestMoveIndex =
@@ -57,14 +65,14 @@ let private getBestMove state scoreStrategy (scoreList: (int * int) list) =
         | Max -> List.maxBy snd reindexList |> fst
         | Min -> List.minBy snd reindexList |> fst
 
-    let board = state.IndexedBoard |> EmptySpaces 
-    let moveIndex = board.[bestMoveIndex] |> fst
-    let moveScore = reindexList.[bestMoveIndex] |> snd
+    let board = state.IndexedBoard |> EmptySpaces
+    let move : Move = board.[bestMoveIndex] |> fst
+    let score : Score = reindexList.[bestMoveIndex] |> snd
 
-    (moveIndex, moveScore)
+    (move, score)
 
-let Minimax (depthLimit:int) (gameState:GameState) : int = 
-    let rec go (negamaxState:NegamaxState) : int * int =
+let Minimax (depthLimit : Depth) (gameState : GameState) : Move =
+    let rec go (negamaxState:NegamaxState) : Move * Score =
         let scoreStrategy = GetScoreStrategy negamaxState
 
         negamaxState.IndexedBoard
@@ -85,12 +93,12 @@ let Minimax (depthLimit:int) (gameState:GameState) : int =
 
     go (GetStartState gameState) |> fst |> Increment
 
-let RandomMove (gameState : GameState) =
+let RandomMove (gameState : GameState) : Move =
     let openMoves = getOpenMoves gameState.Board
     let index = System.Random().Next(openMoves.Length)
     openMoves.[index]
 
-let GetAIMove (gameState:GameState) =
+let GetAIMove (gameState:GameState) : Move =
     let mediumDepth = 3
     let hardDepth = 10
     match gameState.CurrentPlayer.Difficulty with

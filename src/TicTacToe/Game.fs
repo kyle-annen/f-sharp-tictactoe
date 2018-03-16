@@ -1,60 +1,48 @@
 module TicTacToe.Game
 
-open TicTacToe.Types
-let GameOptions = "1 - Computer Vs Computer\n2 - Human Vs Computer\n3 - Human Vs Human"
-let SetupGameState (outputFn : string -> unit) =
-    outputFn GameOptions
-    let gameVersion = Input.GetGameVersion
-    let basePlayer = { PlayerType = Computer; Difficulty = Easy; Space = A}
+open Types
 
-    let players =
-        match gameVersion with
-        | ComputerVsComputer ->
-            ({ basePlayer }, {basePlayer with Space = B})
-        | HumanVsComputer ->
-            ({ basePlayer with PlayerType = Human },
-                {basePlayer with Space = B})
-        | HumanVsHuman ->
-            ({ basePlayer with PlayerType = Human },
-                {basePlayer with PlayerType = Human; Space = B})
+let SetupGameState
+    (input : InputFn) (output : OutputFn) =
+    output Dialog.GameOptions
+    match Input.GetGameVersion input with
+    | ComputerVsComputer -> 'a'
+    | HumanVsComputer ->'a'
+    | HumanVsHuman -> 'a'
 
-
-
-
-
-
-
-let GetMove (gameState : Types.GameState) : int =
+let GetMove
+    (input : InputFn) (gameState : GameState) : Move =
     match gameState.CurrentPlayer.PlayerType with
-    | Types.Human -> Input.GetHumanMove gameState
-    | Types.Computer -> AI.GetAIMove gameState
+    | Human -> Input.GetHumanMove input gameState
+    | Computer -> AI.GetAIMove gameState
 
-let rec GameLoop outputFn (gameState : Types.GameState) =
+let rec GameLoop
+    (input : InputFn) (output : OutputFn) (gameState : GameState) =
     gameState
     |> UI.FormatBoard UI.Template3x3
-    |> outputFn
+    |> output
 
     match gameState.Result with
-    | Win -> outputFn Dialog.Win
-    | Tie -> outputFn Dialog.Tie
+    | Win -> output Dialog.Win
+    | Tie -> output Dialog.Tie
     | _ ->
-        outputFn Dialog.TurnPrompt
+        output Dialog.TurnPrompt
         gameState
-        |> GetMove
+        |> GetMove input
         |> GameState.ProgressGameState gameState
-        |> GameLoop outputFn
+        |> GameLoop input output
 
-let rec PlayGame outputFn (playing : bool) =
+let rec PlayGame
+    (input : InputFn) (output : OutputFn) (playing : bool) : unit =
     if playing then
-        outputFn UI.ClearScreen
-        outputFn Dialog.Greeting
-        let gameState = SetupGameState outputFn
-        GameLoop outputFn MockGameState.GetInitialGameState
-        ContinueOrQuit outputFn
+        output UI.ClearScreen
+        output Dialog.Greeting
+        GameLoop input output MockGameState.GetInitialGameState
+        ContinueOrQuit input output
 
-and ContinueOrQuit outputFn =
-    outputFn Dialog.ContinuePlaying
+and ContinueOrQuit (input : InputFn) (output : OutputFn) : unit =
+    output Dialog.ContinuePlaying
 
-    match Input.GetYesOrNo with
-    | Yes -> PlayGame outputFn true
-    | _ -> PlayGame outputFn false
+    match Input.GetYesOrNo input with
+    | Yes -> PlayGame input output true
+    | _ -> PlayGame input output false

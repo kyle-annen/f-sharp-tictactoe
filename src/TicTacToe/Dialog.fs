@@ -19,3 +19,4 @@ let ContinuePlaying = "Do you want to play again? Input [y] for yes, [n] to exit
 let Easy = "easy";
 let Medium = "medium";
 let Hard = "hard";
+let GameOptions = "1 - Computer Vs Computer\n2 - Human Vs Computer\n3 - Human Vs Human"
