@@ -42,3 +42,8 @@ let GetDifficulty (input : Types.InputFn) : Types.Difficulty =
     | '1' -> Types.Easy
     | '2' -> Types.Medium
     | _ -> Types.Hard
+
+let GetMove (input : Types.InputFn) (gameState : Types.GameState) : Types.Move =
+    match gameState.CurrentPlayer.PlayerType with
+    | Types.Human -> GetHumanMove input gameState
+    | Types.Computer -> AI.GetAIMove gameState

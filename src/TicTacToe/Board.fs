@@ -88,4 +88,4 @@ let GetResult (board : Board) : Result =
     match (checkWin board, checkTie board) with
         | (true, _) -> Win
         | (_ , true) -> Tie
-        | (_ , _) -> None
+        | (_ , _) -> Playing

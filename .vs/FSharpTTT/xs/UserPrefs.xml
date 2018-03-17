@@ -3,7 +3,7 @@
     <Files>
       <File FileName="src/TicTacToe/Board.fs" Line="28" Column="1" />
       <File FileName="src/TicTacToe/MockGameState.fs" Line="6" Column="17" />
-      <File FileName="src/TicTacToe/Game.fs" Line="18" Column="30" />
+      <File FileName="src/TicTacToe/Game.fs" Line="18" Column="25" />
       <File FileName="src/App/Program.fs" Line="3" Column="1" />
       <File FileName="src/TicTacToe/UI.fs" Line="10" Column="18" />
       <File FileName="src/TicTacToe/GameState.fs" Line="17" Column="18" />
@@ -34,7 +34,7 @@
       </Pad>
       <Pad Id="MonoDevelop.UnitTesting.TestPad">
         <State name="__root__">
-          <Node name="FSharpTTT" expanded="True" selected="True" />
+          <Node />
         </State>
       </Pad>
     </Pads>

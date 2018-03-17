@@ -10,7 +10,7 @@ type Board = Space list
 type Result =
     | Win
     | Tie
-    | None
+    | Playing
 
 type Difficulty =
     | Easy

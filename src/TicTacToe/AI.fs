@@ -3,6 +3,9 @@ module TicTacToe.AI
 open Types
 open Board
 
+let MEDIUM_DEPTH = 4
+let HARD_DEPTH = 10
+
 let SwapCurrentSpace (state : NegamaxState) : NegamaxState =
     let nextSpace =
         match state.CurrentSpace with
@@ -89,7 +92,7 @@ let Minimax (depthLimit : Depth) (gameState : GameState) : Move =
                 | (Tie, _)    -> (move, 0)
                 | (_, Max) when negamaxState.Depth > depthLimit -> (move, score - 2)
                 | (_, Min) when negamaxState.Depth > depthLimit -> (move, score + 2)
-                | (None, _)   -> negamaxState |> ProgressState newBoard |> go)
+                | (Playing, _)   -> negamaxState |> ProgressState newBoard |> go)
         |> getBestMove negamaxState scoreStrategy
 
     go (GetStartState gameState) |> fst |> Increment
@@ -100,9 +103,7 @@ let RandomMove (gameState : GameState) : Move =
     openMoves.[index]
 
 let GetAIMove (gameState:GameState) : Move =
-    let mediumDepth = 4
-    let hardDepth = 10
     match gameState.CurrentPlayer.Difficulty with
     | Easy -> RandomMove gameState
-    | Medium -> Minimax mediumDepth gameState
-    | Hard ->  Minimax hardDepth gameState
+    | Medium -> Minimax MEDIUM_DEPTH gameState
+    | Hard ->  Minimax HARD_DEPTH gameState
