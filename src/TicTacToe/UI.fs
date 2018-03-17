@@ -46,7 +46,7 @@ let DisplayGameTypePrompt (output : OutputFn) =
     output Dialog.NewLine
     output Dialog.GameOptions
 
-let TurnAnnouncement (output : OutputFn) (gameState : GameState) =
+let DisplayTurnPrompt (output : OutputFn) (gameState : GameState) =
     match gameState.CurrentPlayer.PlayerType with
     | Computer ->
         output Dialog.VerticalPadding
@@ -87,7 +87,7 @@ let DisplayGameMessages (output : OutputFn) (gameState : GameState) =
         DisplayMessageWithPadding output Dialog.GameOver
         output Dialog.Tie
 
-    | _ -> TurnAnnouncement output gameState
+    | _ -> DisplayTurnPrompt output gameState
 
 let DisplayUI (output : OutputFn) (gameState : GameState) =
     ClearScreen output
