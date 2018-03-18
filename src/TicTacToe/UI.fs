@@ -6,22 +6,23 @@ open Logger
 let private xToken = "X"
 let private oToken = "O"
 
+let Template3x3<'a> =
+    Printf.StringFormat<'a>" %s | %s | %s \n---+---+---\n %s | %s | %s \n---+---+---\n %s | %s | %s "
+
 let ConsoleRender : OutputFn = Log LogLevel.Game (printf "%s \n")
 
 let ClearScreen (output : OutputFn) =
-    let consoleRenderIdentifier = ConsoleRender.GetType().FullName
-    match output.GetType().FullName with
-    | consoleRenderIdentifier -> System.Console.Clear()
-    | _ -> ()
-
-let Template3x3<'a> =
-    Printf.StringFormat<'a>" %s | %s | %s \n---+---+---\n %s | %s | %s \n---+---+---\n %s | %s | %s "
+    LanguagePrimitives.PhysicalEquality ConsoleRender output
+    |> function
+    | true ->
+        System.Console.Clear()
+        true
+    | _ -> false
 
 let private applyTemplate template board : string =
     match board with
     | [a;b;c;d;e;f;g;h;i] -> sprintf template a b c d e f g h i
     | _ -> ""
-
 
 let FormatBoard template (gameState : GameState) =
     gameState.Board
@@ -34,7 +35,7 @@ let FormatBoard template (gameState : GameState) =
     |> applyTemplate template
 
 let DisplayDifficultyPrompt (output : OutputFn) (playerNumber : int) =
-    ClearScreen output
+    ClearScreen output |> ignore
     output Dialog.Greeting
     output Dialog.NewLine
     output (Dialog.SelectDifficulty + (sprintf "%i" playerNumber))
@@ -73,7 +74,7 @@ let DisplayMessageWithPadding (output : OutputFn) (message : string) =
     output message
     output Dialog.VerticalPadding
 
-let DisplayGameMessages (output : OutputFn) (gameState : GameState) =
+let private displayGameMessages (output : OutputFn) (gameState : GameState) =
     match gameState.Result with
     | Win ->
         DisplayMessageWithPadding output Dialog.GameOver
@@ -90,14 +91,14 @@ let DisplayGameMessages (output : OutputFn) (gameState : GameState) =
     | _ -> DisplayTurnPrompt output gameState
 
 let DisplayUI (output : OutputFn) (gameState : GameState) =
-    ClearScreen output
+    ClearScreen output |> ignore
     DisplayHeading output
     DisplayBoard output gameState
-    DisplayGameMessages output gameState
+    displayGameMessages output gameState
 
 let DisplayGreeting (output : OutputFn) =
-        ClearScreen output
-        output Dialog.Greeting
+    ClearScreen output |> ignore
+    output Dialog.Greeting
 
 let DisplayContinueMessage (output : OutputFn) =
     output Dialog.ContinuePlaying

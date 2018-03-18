@@ -42,12 +42,12 @@ let GetStartState (gameState:GameState) : NegamaxState = {
     IndexedBoard = List.indexed gameState.Board;
 }
 
-let GetScoreStrategy state =
+let GetScoreStrategy (state : NegamaxState) : ScoreStrategy =
     match state.CurrentSpace = state.MaxSpace with
     | true -> Max
     | _ -> Min
 
-let Increment  = (+) 1
+let private increment  = (+) 1
 
 let MakeMoveIndexedBoard
     (state : NegamaxState) (move : Move) : IndexedBoard =
@@ -95,7 +95,7 @@ let Minimax (depthLimit : Depth) (gameState : GameState) : Move =
                 | (Playing, _)   -> negamaxState |> ProgressState newBoard |> go)
         |> getBestMove negamaxState scoreStrategy
 
-    go (GetStartState gameState) |> fst |> Increment
+    go (GetStartState gameState) |> fst |> increment
 
 let RandomMove (gameState : GameState) : Move =
     let openMoves = GetOpenMoves gameState.Board
