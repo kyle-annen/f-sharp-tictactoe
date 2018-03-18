@@ -6,8 +6,10 @@ open Logger
 let private xToken = "X"
 let private oToken = "O"
 
+let private padRow = "          "
+
 let Template3x3<'a> =
-    Printf.StringFormat<'a>" %s | %s | %s \n---+---+---\n %s | %s | %s \n---+---+---\n %s | %s | %s "
+    Printf.StringFormat<'a>"%s %s ┃ %s ┃ %s \n%s━━━╋━━━╋━━━\n%s %s ┃ %s ┃ %s \n%s━━━╋━━━╋━━━\n%s %s ┃ %s ┃ %s "
 
 let ConsoleRender : OutputFn = Log LogLevel.Game (printf "%s \n")
 
@@ -21,7 +23,8 @@ let ClearScreen (output : OutputFn) =
 
 let private applyTemplate template board : string =
     match board with
-    | [a;b;c;d;e;f;g;h;i] -> sprintf template a b c d e f g h i
+    | [a;b;c;d;e;f;g;h;i] ->
+        sprintf template padRow a b c padRow padRow d e f padRow padRow g h i
     | _ -> ""
 
 let FormatBoard template (gameState : GameState) =
