@@ -8,3 +8,4 @@ src/TicTacToe/bin/
 src/TicTacToe/obj/
 tests/TicTacToeTests/bin/
 tests/TicTacToeTests/obj/
+.vs/
