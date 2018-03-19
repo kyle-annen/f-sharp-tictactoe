@@ -8,4 +8,4 @@ pipelines:
         script:
           - dotnet restore
           - dotnet build src/TicTacToe
-          - dotnet test tests/TicTacToe.Tests
+          - dotnet test tests/TicTacToeTests
