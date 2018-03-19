@@ -76,6 +76,6 @@ type Depth = int
 
 type Moves = Move list
 
-type OutputFn = string -> unit
+type IOutput = string -> unit
 
-type InputFn = bool -> Option
+type IInput = bool -> Option

@@ -4,7 +4,7 @@ open Types
 
 let private addContent content header = header + content
 
-let Log (level:LogLevel) (outputFn : OutputFn) (content:string) =
+let Log (level:LogLevel) (outputFn : IOutput) (content:string) =
     let info, danger, debug, game = "Info", "Danger", "Debug", ""
     let template = Printf.StringFormat<string->string>"F# TicTacToe [%s]: "
 

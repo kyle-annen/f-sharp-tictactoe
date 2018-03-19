@@ -11,9 +11,9 @@ let private padRow = "          "
 let Template3x3<'a> =
     Printf.StringFormat<'a>"%s %s ┃ %s ┃ %s \n%s━━━╋━━━╋━━━\n%s %s ┃ %s ┃ %s \n%s━━━╋━━━╋━━━\n%s %s ┃ %s ┃ %s "
 
-let ConsoleRender : OutputFn = Log LogLevel.Game (printf "%s \n")
+let ConsoleRender : IOutput = Log LogLevel.Game (printf "%s \n")
 
-let ClearScreen (output : OutputFn) =
+let ClearScreen (output : IOutput) =
     LanguagePrimitives.PhysicalEquality ConsoleRender output
     |> function
     | true ->
@@ -37,7 +37,7 @@ let FormatBoard template (gameState : GameState) =
             | _ -> sprintf "%i" (i + 1))
     |> applyTemplate template
 
-let DisplayDifficultyPrompt (output : OutputFn) (playerNumber : int) =
+let DisplayDifficultyPrompt (output : IOutput) (playerNumber : int) =
     ClearScreen output |> ignore
     output Dialog.Greeting
     output Dialog.NewLine
@@ -45,12 +45,12 @@ let DisplayDifficultyPrompt (output : OutputFn) (playerNumber : int) =
     output Dialog.NewLine
     output Dialog.DifficultyOptions
 
-let DisplayGameTypePrompt (output : OutputFn) =
+let DisplayGameTypePrompt (output : IOutput) =
     output Dialog.SelectGameType
     output Dialog.NewLine
     output Dialog.GameOptions
 
-let DisplayTurnPrompt (output : OutputFn) (gameState : GameState) =
+let DisplayTurnPrompt (output : IOutput) (gameState : GameState) =
     match gameState.CurrentPlayer.PlayerType with
     | Computer ->
         output Dialog.VerticalPadding
@@ -64,20 +64,20 @@ let DisplayTurnPrompt (output : OutputFn) (gameState : GameState) =
         | _ -> output Dialog.Player2Announce
         output Dialog.MoveEntryPrompt
 
-let DisplayBoard (output : OutputFn) (gameState : GameState) =
+let DisplayBoard (output : IOutput) (gameState : GameState) =
     gameState |> FormatBoard Template3x3 |> output
 
-let DisplayHeading (output : OutputFn) =
+let DisplayHeading (output : IOutput) =
     output Dialog.VerticalPadding
     output Dialog.Greeting
     output Dialog.VerticalPadding
 
-let DisplayMessageWithPadding (output : OutputFn) (message : string) =
+let DisplayMessageWithPadding (output : IOutput) (message : string) =
     output Dialog.VerticalPadding
     output message
     output Dialog.VerticalPadding
 
-let private displayGameMessages (output : OutputFn) (gameState : GameState) =
+let private displayGameMessages (output : IOutput) (gameState : GameState) =
     match gameState.Result with
     | Win ->
         DisplayMessageWithPadding output Dialog.GameOver
@@ -93,15 +93,15 @@ let private displayGameMessages (output : OutputFn) (gameState : GameState) =
 
     | _ -> DisplayTurnPrompt output gameState
 
-let DisplayUI (output : OutputFn) (gameState : GameState) =
+let DisplayUI (output : IOutput) (gameState : GameState) =
     ClearScreen output |> ignore
     DisplayHeading output
     DisplayBoard output gameState
     displayGameMessages output gameState
 
-let DisplayGreeting (output : OutputFn) =
+let DisplayGreeting (output : IOutput) =
     ClearScreen output |> ignore
     output Dialog.Greeting
 
-let DisplayContinueMessage (output : OutputFn) =
+let DisplayContinueMessage (output : IOutput) =
     output Dialog.ContinuePlaying

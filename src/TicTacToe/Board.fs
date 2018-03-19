@@ -15,11 +15,9 @@ let FollowingSpaces (move : Move) (board:Board) : Board =
     | (_, _) when board.Length = move -> []
     | _ -> board |> Seq.skip move |> Seq.toList
 
-let MakeMove space : Board = [space;]
-
 let PlaceMove (move : Move) (space : Space) (board : Board) : Board =
     FollowingSpaces move board
-    |> List.append (MakeMove space)
+    |> List.append [space]
     |> List.append (PrecedingSpaces move board)
 
 let private openSpace (_, space: Space) = space = Empty
@@ -33,12 +31,16 @@ let GetOpenMoves (board : Board) : Moves =
     |> List.map indexToMove
 
 let private checkEmpty (board : Board) : bool =
-    board |> List.exists (fun elem -> elem = Empty)
+    board |> List.exists (fun space -> space = Empty)
 
-let CheckList(board : Board) : bool =
-    match checkEmpty board with
+let private checkCombo (board : Board) =
+    List.forall (fun space -> space = board.Head) board
+
+let CheckCombo (board : Board) : bool =
+    let openMovePresent = checkEmpty board
+    match openMovePresent with
     | true -> false
-    | _ -> List.forall (fun elem -> elem = board.Head) board
+    | _ -> checkCombo board
 
 let private intSqrt (n:int) : int =
     n |> float |> sqrt |> int
@@ -77,18 +79,24 @@ let Diagonals (board : Board) : Board list =
     [ diagonal1; diagonal2 ]
     |> List.map (getBoardValuesFromIndex board)
 
+let private checkAllCombos = fun acc boardCombo -> acc || (CheckCombo boardCombo)
+
 let private checkWin (board : Board) : bool =
     (Rows board)
     |> List.append (Columns board)
     |> List.append (Diagonals board)
-    |> List.fold (fun acc boardSeq -> acc || (CheckList boardSeq)) false
+    |> List.fold checkAllCombos false
 
 let private checkTie (board : Board) : bool =
     let emptySpaces = List.exists (fun elem -> elem = Empty) board
-    (not emptySpaces) && (not (checkWin board))
+    let win = checkWin board
+    (not emptySpaces) && (not win)
 
 let GetResult (board : Board) : Result =
-    match (checkWin board, checkTie board) with
+    let win = checkWin board
+    let tie = checkTie board
+
+    match (win, tie) with
         | (true, _) -> Win
         | (_ , true) -> Tie
         | (_ , _) -> Playing

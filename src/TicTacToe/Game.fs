@@ -7,12 +7,12 @@ let private player1 = 1
 let private player2 = 2
 
 let GetComputerDifficulty
-    (input : InputFn) (output : OutputFn) (playerNumber : int) : Difficulty =
+    (input : IInput) (output : IOutput) (playerNumber : int) : Difficulty =
     UI.DisplayDifficultyPrompt output playerNumber
     Input.GetDifficulty input
 
 let SetupGameState
-    (input : InputFn) (output : OutputFn) : GameState =
+    (input : IInput) (output : IOutput) : GameState =
     UI.DisplayGameTypePrompt output
 
     let basePlayer = { PlayerType = Computer; Difficulty = Easy; Space = A }
@@ -37,7 +37,7 @@ let SetupGameState
         Board = Board.InitBoard boardSize3x3;
         Result = Playing;}
 
-let rec GameLoop (input : InputFn) (output : OutputFn) (gameState : GameState) =
+let rec GameLoop (input : IInput) (output : IOutput) (gameState : GameState) =
     UI.DisplayUI output gameState
 
     match gameState.Result with
@@ -48,13 +48,13 @@ let rec GameLoop (input : InputFn) (output : OutputFn) (gameState : GameState) =
         |> GameLoop input output
     | _ -> ()
 
-let rec PlayGame (input : InputFn) (output : OutputFn) (playing : bool) : unit =
+let rec PlayGame (input : IInput) (output : IOutput) (playing : bool) : unit =
     if playing then
         UI.DisplayGreeting output
         SetupGameState input output |> GameLoop input output
         ContinueOrQuit input output
 
-and ContinueOrQuit (input : InputFn) (output : OutputFn) : unit =
+and ContinueOrQuit (input : IInput) (output : IOutput) : unit =
     UI.DisplayContinueMessage output
 
     match Input.GetYesOrNo input with

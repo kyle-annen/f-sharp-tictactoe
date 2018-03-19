@@ -9,7 +9,7 @@ let CheckInput (option : Types.Option) (validOptions : Types.Options) =
     List.contains option validOptions
 
 let rec GetInput
-    (input : Types.InputFn) (validOptions : Types.Options) : Types.Option =
+    (input : Types.IInput) (validOptions : Types.Options) : Types.Option =
 
     let option : Types.Option = input true
     match option with
@@ -17,7 +17,7 @@ let rec GetInput
     | _ -> GetInput input validOptions
 
 let GetHumanMove
-    (input : Types.InputFn)
+    (input : Types.IInput)
     (gameState : Types.GameState) : Types.Move =
 
     gameState
@@ -26,24 +26,24 @@ let GetHumanMove
     |> string
     |> int
 
-let GetYesOrNo (input : Types.InputFn) : Types.Response =
+let GetYesOrNo (input : Types.IInput) : Types.Response =
     match GetInput input yesNoOptions with
     | 'y' -> Types.Response.Yes
     | _ -> Types.Response.No
 
-let GetGameVersion (input : Types.InputFn) : Types.GameVersion =
+let GetGameVersion (input : Types.IInput) : Types.GameVersion =
     match GetInput input ['1';'2';'3'] with
     | '1' -> Types.GameVersion.ComputerVsComputer
     | '2' -> Types.GameVersion.HumanVsComputer
     | _ -> Types.GameVersion.HumanVsHuman
 
-let GetDifficulty (input : Types.InputFn) : Types.Difficulty =
+let GetDifficulty (input : Types.IInput) : Types.Difficulty =
     match GetInput input ['1';'2';'3'] with
     | '1' -> Types.Easy
     | '2' -> Types.Medium
     | _ -> Types.Hard
 
-let GetMove (input : Types.InputFn) (gameState : Types.GameState) : Types.Move =
+let GetMove (input : Types.IInput) (gameState : Types.GameState) : Types.Move =
     match gameState.CurrentPlayer.PlayerType with
     | Types.Human -> GetHumanMove input gameState
     | Types.Computer -> AI.GetAIMove gameState
