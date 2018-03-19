@@ -20,8 +20,7 @@ let SetupGameState
     let players =
         match Input.GetGameVersion input with
         | ComputerVsComputer ->
-            let player1 = { basePlayer with 
-                Difficulty = GetComputerDifficulty input output player1}
+            let player1 = { basePlayer with Difficulty = GetComputerDifficulty input output player1}
             let player2 = { basePlayer with Difficulty = GetComputerDifficulty input output player2; Space = B }
             (player1, player2)
         | HumanVsComputer ->

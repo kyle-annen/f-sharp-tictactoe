@@ -5,22 +5,22 @@ open Types
 let InitBoard (dimension : int) : Board =
     [ for _ in 1..(dimension * dimension) do yield Empty]
 
-let GetPreceding (move : Move) (board:Board) : Board =
+let PrecedingSpaces (move : Move) (board:Board) : Board =
     board
     |> Seq.take (move - 1)
     |> Seq.toList
 
-let GetFollowing (move : Move) (board:Board) : Board =
+let FollowingSpaces (move : Move) (board:Board) : Board =
     match (move, board) with
     | (_, _) when board.Length = move -> []
     | _ -> board |> Seq.skip move |> Seq.toList
 
-let GetMove space : Board = [space;]
+let MakeMove space : Board = [space;]
 
 let PlaceMove (move : Move) (space : Space) (board : Board) : Board =
-    GetFollowing move board
-    |> List.append (GetMove space)
-    |> List.append (GetPreceding move board)
+    FollowingSpaces move board
+    |> List.append (MakeMove space)
+    |> List.append (PrecedingSpaces move board)
 
 let private openSpace (_, space: Space) = space = Empty
 
@@ -60,6 +60,9 @@ let Columns (board : Board) : Board list =
     |> List.groupBy (colomn dimension)
     |> List.map (unIndex >> unIndexNestedList)
 
+let private getBoardValuesFromIndex (board : Board) =
+    fun indexList -> List.map (fun index -> board.[index - 1]) indexList
+
 let Diagonals (board : Board) : Board list =
     let dimension = (intSqrt board.Length)
 
@@ -72,7 +75,7 @@ let Diagonals (board : Board) : Board list =
             if (i + 1) % (dimension - 1) = 0 then yield i]
 
     [ diagonal1; diagonal2 ]
-    |> List.map (fun elem -> List.map (fun v -> board.[v - 1]) elem)
+    |> List.map (getBoardValuesFromIndex board)
 
 let private checkWin (board : Board) : bool =
     (Rows board)
