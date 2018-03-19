@@ -6,5 +6,5 @@ src/App/bin/
 src/App/obj/
 src/TicTacToe/bin/
 src/TicTacToe/obj/
-tests/TicTacToe.Tests/bin/
-tests/TicTacToe.Tests/obj/
+tests/TicTacToeTests/bin/
+tests/TicTacToeTests/obj/
