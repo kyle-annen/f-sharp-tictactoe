@@ -1,0 +1,9 @@
+image: microsoft/dotnet:2.0.6-sdk-2.1.101-stretch
+
+before_script:
+  - dotnet restore
+build:
+  stage: build
+  script:
+    - dotnet build src/TicTacToe
+    - dotnet test tests/TicTacToeTests

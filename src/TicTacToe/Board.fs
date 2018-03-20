@@ -20,7 +20,7 @@ let PlaceMove (move : Move) (space : Space) (board : Board) : Board =
     |> List.append [space]
     |> List.append (PrecedingSpaces move board)
 
-let private openSpace (_, space: Space) = space = Empty
+let private openSpace (_, space : Space) = space = Empty
 
 let private indexToMove (index, _) : Move = index + 1
 
