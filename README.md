@@ -45,6 +45,8 @@ There are five dependencies, all used for test driven development, four for NUni
 
 ## Functional Vs Object Oriented
 
-As with Scala and Ocaml, F# can be written with classes or without, and can have mutation. I have chosen to only use mutation in testing in order to mock user input.
+As with Scala and Ocaml, F# can be written with classes or without, and can have mutation.
 
-F# is also similar to Scala in that it has seamless interop with the other dotnet languages, which allows for a very mature and robust API ecosystem.
+I have chosen to only use mutation in testing for mocks. Types and Functions are favored over classes, with name spacing provided by modules.
+
+Where ever possible pattern matching and pipes are favored over if/else blocks, and partial application is kept to a minimum to help convey intent.
