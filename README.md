@@ -7,6 +7,14 @@ Installing F# is straight forward as it is included in Mono.
 brew install mono
 ```
 
+Dotnet CLI is used for building, dependency management, and for testing. It can be downloaded with Brew/Casks.
+
+```bash
+brew update
+brew tap caskroom/cask
+brew cask install dotnet
+```
+
 In terms of IDEs, Visual Studio Mac, Visual Studio Code, and JetBrains Rider are all good.
 
 I prefer Visual Studio Code with the Ionide packages installed, as the type annotations and introspection are top notch.

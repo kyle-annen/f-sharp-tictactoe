@@ -1,5 +1,5 @@
 #!/bin/bash
 
-cd tests/TicTacToe.tests
+cd tests/TicTacToeTests
 dotnet restore
 dotnet watch test
