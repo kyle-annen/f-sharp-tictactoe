@@ -48,13 +48,14 @@ let rec GameLoop (input : IInput) (output : IOutput) (gameState : GameState) =
         |> GameLoop input output
     | _ -> ()
 
-let rec PlayGame (input : IInput) (output : IOutput) (playing : bool) : unit =
+let rec PlayGame (input : IInput) (output : IOutput) (playing : bool) : bool =
     if playing then
         UI.DisplayGreeting output
         SetupGameState input output |> GameLoop input output
         ContinueOrQuit input output
+    else true
 
-and ContinueOrQuit (input : IInput) (output : IOutput) : unit =
+and ContinueOrQuit (input : IInput) (output : IOutput) : bool =
     UI.DisplayContinueMessage output
 
     match Input.GetYesOrNo input with
