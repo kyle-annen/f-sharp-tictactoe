@@ -2,19 +2,21 @@
 
 ## Setup and suggested tools
 
-Installing F# is straight forward as it is included in Mono. Assuming `brew` is installed:
+Installing F# is straight forward as it is included in Dotnet CLI.
 
-```bash
-brew install mono
-```
+Dotnet CLI is also used for building, dependency management, and for testing. It can be downloaded with Brew/Casks.
 
-Dotnet CLI is used for building, dependency management, and for testing. It can be downloaded with Brew/Casks.
+Assuming `brew` is installed:
 
 ```bash
 brew update
 brew tap caskroom/cask
 brew cask install dotnet-sdk
 ```
+
+If you prefer not to use homebrew casks, `dotnet-sdk` can be downloaded and installed from Microsoft:
+
+https://www.microsoft.com/net/learn/get-started/macos
 
 In terms of IDEs, Visual Studio Mac, Visual Studio Code, and JetBrains Rider are all good.
 
