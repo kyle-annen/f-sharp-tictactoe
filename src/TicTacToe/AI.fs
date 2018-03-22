@@ -6,7 +6,7 @@ open Board
 let private mediumDepth = 4
 let private hardDepth = 10
 
-let SwapCurrentSpace (state : NegamaxState) : NegamaxState =
+let SwapCurrentSpace (state : MinimaxState) : MinimaxState =
     let nextSpace =
         match state.CurrentSpace with
         | A -> B
@@ -14,14 +14,14 @@ let SwapCurrentSpace (state : NegamaxState) : NegamaxState =
     { state with CurrentSpace = nextSpace }
 
 let UpdateNegamaxBoard
-    (newBoard:IndexedBoard) (state:NegamaxState) : NegamaxState =
+    (newBoard:IndexedBoard) (state:MinimaxState) : MinimaxState =
     { state with IndexedBoard = newBoard }
 
-let IncreaseDepth (state:NegamaxState) : NegamaxState =
+let IncreaseDepth (state:MinimaxState) : MinimaxState =
     { state with Depth = (state.Depth + 1) }
 
 let ProgressState
-    (newBoard:IndexedBoard) (state:NegamaxState) : NegamaxState =
+    (newBoard:IndexedBoard) (state:MinimaxState) : MinimaxState =
     state
     |> SwapCurrentSpace
     |> UpdateNegamaxBoard newBoard
@@ -35,14 +35,14 @@ let private unindex = List.map (fun (_, v) -> v)
 
 let private emptySpaces = List.filter (fun (_, space) -> space = Empty)
 
-let GetStartState (gameState:GameState) : NegamaxState = {
+let GetStartState (gameState:GameState) : MinimaxState = {
     MaxSpace = gameState.CurrentPlayer.Space;
     CurrentSpace = gameState.CurrentPlayer.Space;
     Depth = 1;
     IndexedBoard = List.indexed gameState.Board;
 }
 
-let GetScoreStrategy (state : NegamaxState) : ScoreStrategy =
+let GetScoreStrategy (state : MinimaxState) : ScoreStrategy =
     match state.CurrentSpace = state.MaxSpace with
     | true -> Max
     | _ -> Min
@@ -50,7 +50,7 @@ let GetScoreStrategy (state : NegamaxState) : ScoreStrategy =
 let private increment  = (+) 1
 
 let MakeMoveIndexedBoard
-    (state : NegamaxState) (move : Move) : IndexedBoard =
+    (state : MinimaxState) (move : Move) : IndexedBoard =
     state.IndexedBoard
     |> List.map (
         fun (i, v) ->
@@ -58,7 +58,7 @@ let MakeMoveIndexedBoard
             else (i, v))
 
 let private getBestMove
-    (state : NegamaxState)
+    (state : MinimaxState)
     (scoreStrategy : ScoreStrategy)
     (scoreList: MoveScore list) : MoveScore =
     let reindexList = scoreList |> unindex |> List.indexed
@@ -75,7 +75,7 @@ let private getBestMove
     (move, score)
 
 let Minimax (depthLimit : Depth) (gameState : GameState) : Move =
-    let rec go (negamaxState:NegamaxState) : Move * Score =
+    let rec go (negamaxState:MinimaxState) : Move * Score =
         let scoreStrategy = GetScoreStrategy negamaxState
 
         negamaxState.IndexedBoard

@@ -25,6 +25,7 @@
     <Compile Include="UITests.fs" />
     <Compile Include="InputTests.fs" />
     <Compile Include="GameTests.fs" />
+    <Compile Include="SetupTests.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 

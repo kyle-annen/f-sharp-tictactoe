@@ -36,7 +36,7 @@ type GameState = {
 
 type IndexedBoard = (int * Space) list
 
-type NegamaxState = {
+type MinimaxState = {
     MaxSpace: Space;
     CurrentSpace: Space;
     Depth: int;

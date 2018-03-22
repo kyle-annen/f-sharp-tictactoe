@@ -82,7 +82,7 @@ let Diagonals (board : Board) : Board list =
 let private checkAllCombos = fun acc boardCombo -> acc || (CheckCombo boardCombo)
 
 let private checkWin (board : Board) : bool =
-    (Rows board)
+    Rows board
     |> List.append (Columns board)
     |> List.append (Diagonals board)
     |> List.fold checkAllCombos false
